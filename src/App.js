@@ -1,12 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react';
-
 import mapboxgl from 'mapbox-gl';
+
+import DropdownMenue from './components/DropdownMenue'
+import Overlay from './components/Overlay'
+import HumborgerMenue from './components/HumborgerMenue';
 
 mapboxgl.accessToken = "pk.eyJ1IjoiYWxzaGFmZWkyNDMwIiwiYSI6ImNrczBkNnV5NTExZ3cycG85aXFvODlhcjYifQ.nHRJE_NeCudV5qyb8baZkg"
 
 export default function App(){
     const mapContainer = useRef(null);
     const map = useRef(null);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true); 
     const [lng, setLng] = useState(31.23);
     const [lat, setLate] = useState(30.07);
     const [zoom, setZoom] = useState(5);
@@ -103,12 +107,27 @@ export default function App(){
         });     
     })
 
+    const handleShowSidebar = (e) => {
+        // e.preventDefault();
+        console.log(isSidebarOpen)
+        setIsSidebarOpen(!isSidebarOpen)
+    }
+
     return (
         <div>
-            <div className="sidebar">
-                Longitude: {lng}  |  Latitude:  {lat}  |  Zoom: {zoom}
+            {isSidebarOpen ? (
+                <>
+                    <DropdownMenue handleShowSidebar={handleShowSidebar}/>
+                    <Overlay handleShowSidebar={handleShowSidebar} />
+                </>
+            ): <HumborgerMenue handleShowSidebar={handleShowSidebar} />
+            }
+            <div>
+                {/* <div className="sidebar">
+                    Longitude: {lng}  |  Latitude:  {lat}  |  Zoom: {zoom}
+                </div> */}
+                <div ref={mapContainer} className="map-container h-screen" />
             </div>
-            <div ref={mapContainer} className="map-container" />
         </div>
     )
 }
