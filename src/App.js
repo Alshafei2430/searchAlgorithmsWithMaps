@@ -14,7 +14,7 @@ export default function App(){
     const [lng, setLng] = useState(31.23);
     const [lat, setLate] = useState(30.07);
     const [zoom, setZoom] = useState(5);
-    const [coordinates, setcoordinates] = useState([
+    const [coordinates] = useState([
         [31.23, 30.06],
         [31.01, 30.55],
         [29.99, 31.30],
@@ -80,30 +80,34 @@ export default function App(){
             setZoom(map.current.getZoom().toFixed(2));
         })
         map.current.on('load', () => {
-            map.current.addSource('route', {
-                'type': 'geojson',
-                'data': {
-                    'type': 'Feature',
-                    'properties': {},
-                    'geometry': {
-                        'type': 'LineString',
-                        'coordinates': coordinates
+            if (!map.current.getSource('route')) {
+                map.current.addSource('route', {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'properties': {},
+                        'geometry': {
+                            'type': 'LineString',
+                            'coordinates': coordinates
+                        }
                     }
-                }
-            });
-            map.current.addLayer({
-                'id': 'route',
-                'type': 'line',
-                'source': 'route',
-                'layout': {
-                    'line-join': 'round',
-                    'line-cap': 'round'
-                },
-                'paint': {
-                    'line-color': '#888',
-                    'line-width': 8
-                }
-            });
+                });
+            };
+            if (!map.current.getLayer('route')) {
+                map.current.addLayer({
+                    'id': 'route',
+                    'type': 'line',
+                    'source': 'route',
+                    'layout': {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    'paint': {
+                        'line-color': '#888',
+                        'line-width': 8
+                    }
+                });
+            };
         });     
     })
 
