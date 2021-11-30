@@ -10,67 +10,99 @@ mapboxgl.accessToken = "pk.eyJ1IjoiYWxzaGFmZWkyNDMwIiwiYSI6ImNrczBkNnV5NTExZ3cyc
 export default function App(){
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true); 
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false); 
     const [lng, setLng] = useState(31.23);
     const [lat, setLate] = useState(30.07);
     const [zoom, setZoom] = useState(5);
-    const [coordinates] = useState([
-        [31.23, 30.06],
-        [31.01, 30.55],
-        [29.99, 31.30],
-        [31.17, 31.26],
-        [32.27, 31.40],
-        [31.28, 27.29],
-        [32.53, 30.20],
-      ])
-    const features = coordinates.map(coordinate => ({
-        'type': 'Feature',
-        'properties': {
-            'message': `${coordinate[0]}`,
-            'iconSize': [60, 60]
-        },
-        'geometry': {
-            'type': 'Point',
-            'coordinates': [coordinate[0], coordinate[1]]
-        }
-    }))
-
-    const geojson = {
-        'type': 'FeatureCollection',
-        'features': features,
-    };
+    // const [coordinates, setCoordinates] = useState([])
+    // const [features, setFeatures] = useState([])
+    const [geojson, setGeojson] = useState({})
 
     useEffect(() => {
+        // render the map
         if (map.current) return;
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [lng, lat],
             zoom: zoom
+        })                
+    })
+
+    useEffect(() => {
+        // get cities from the backend
+        fetch('http://localhost:5000/depthFirstSearch')
+        .then(response => response.json())
+        .then(({data: cities}) => {
+            console.log(cities)
+            let featuresList = []
+            for (const city of cities){
+                console.log("here")
+                featuresList.push({
+                    'type': 'Feature',
+                    'properties': {
+                        'cityName': `${city.name}`,
+                        'cityId': `${city.id}`,
+                        'message': `${city.coordinate[0]}`,
+                        'iconSize': [60, 10]
+                    },
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [city.coordinate[0], city.coordinate[1]]
+                    }
+                })
+            }
+
+            setGeojson({
+                'type': 'FeatureCollection',
+                'features': featuresList,
+            })
         })
-        // Add markers to the map.
-        for (const marker of geojson.features) {
-            console.log(marker)
-            // Create a DOM element for each marker.
-            const el = document.createElement('div');
-            const width = marker.properties.iconSize[0];
-            const height = marker.properties.iconSize[1];
-            el.className = 'marker';
-            el.style.backgroundImage = `url(https://placekitten.com/g/${width}/${height}/)`;
-            el.style.width = `${width}px`;
-            el.style.height = `${height}px`;
-            el.style.backgroundSize = '100%';
             
-            el.addEventListener('click', () => {
-                window.alert(marker.properties.message);
-            });
-            
-            // Add markers to the map.
-            new mapboxgl.Marker(el)
-            .setLngLat(marker.geometry.coordinates)
-            .addTo(map.current);
-        }
-})
+    }, [])
+    useEffect(() => {
+        if(!geojson.features) return;
+            // create a helper function
+            // function setAttributes(el, attrs) {
+            //     for(var key in attrs) {
+            //     el.setAttribute(key, attrs[key]);
+            //     }
+            // }
+            for (const marker of geojson.features) {
+                    // const mark = document.createElement('svg')
+                    // setAttributes(mark, {
+                    //     'class': 'h-5 w-5  fill-current text-green-600',
+                    //     'viewBox': '0 0 20 20',
+                    // })
+                    // const svgPath = document.createElement('path')
+                    // setAttributes(svgPath, {
+                    //     'fill-rule': "evenodd",
+                    //     'd':"M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z",
+                    //     'clip-rule': "evenodd",
+                    // })
+                    // mark.appendChild(svgPath)
+                    
+                    // el.addEventListener('click', () => {
+                    //     window.alert(marker.properties.message);
+                    // });
+                    
+                    // Add markers to the map.
+                    // Set marker options.
+                    new mapboxgl.Marker({
+                        color: "#ff0fff",
+                        
+                    }).setLngLat(marker.geometry.coordinates).addTo(map.current);
+                    // new mapboxgl.Marker(mark)
+                    // .setLngLat(marker.geometry.coordinates)
+                    // .addTo(map.current);
+                }
+        }, [geojson])
+
+// // Add markers to the map.
+// if(features.length > 0)
+// {
+//     
+// }
 
     useEffect(() => {
         if (!map.current) return;
@@ -79,41 +111,44 @@ export default function App(){
             setLate(map.current.getCenter().lat.toFixed(4));
             setZoom(map.current.getZoom().toFixed(2));
         })
-        map.current.on('load', () => {
-            if (!map.current.getSource('route')) {
-                map.current.addSource('route', {
-                    'type': 'geojson',
-                    'data': {
-                        'type': 'Feature',
-                        'properties': {},
-                        'geometry': {
-                            'type': 'LineString',
-                            'coordinates': coordinates
-                        }
-                    }
-                });
-            };
-            if (!map.current.getLayer('route')) {
-                map.current.addLayer({
-                    'id': 'route',
-                    'type': 'line',
-                    'source': 'route',
-                    'layout': {
-                        'line-join': 'round',
-                        'line-cap': 'round'
-                    },
-                    'paint': {
-                        'line-color': '#888',
-                        'line-width': 8
-                    }
-                });
-            };
-        });     
+        // map.current.on('load', () => {
+        //     if (!map.current.getSource('route')) {
+        //         map.current.addSource('route', {
+        //             'type': 'geojson',
+        //             'data': {
+        //                 'type': 'Feature',
+        //                 'properties': {},
+        //                 'geometry': {
+        //                     'type': 'LineString',
+        //                     'coordinates': coordinates
+        //                 }
+        //             }
+        //         });
+        //     };
+        //     if (!map.current.getLayer('route')) {
+        //         map.current.addLayer({
+        //             'id': 'route',
+        //             'type': 'line',
+        //             'source': 'route',
+        //             'layout': {
+        //                 'line-join': 'round',
+        //                 'line-cap': 'round'
+        //             },
+        //             'paint': {
+        //                 'line-color': '#888',
+        //                 'line-width': 8
+        //             }
+        //         });
+        //     };
+        // });     
+    })
+
+    useEffect(() => {
+        
     })
 
     const handleShowSidebar = (e) => {
-        // e.preventDefault();
-        console.log(isSidebarOpen)
+        e.preventDefault();
         setIsSidebarOpen(!isSidebarOpen)
     }
 
@@ -127,9 +162,9 @@ export default function App(){
             ): <HumborgerMenue handleShowSidebar={handleShowSidebar} />
             }
             <div>
-                {/* <div className="sidebar">
+                <div className="sidebar">
                     Longitude: {lng}  |  Latitude:  {lat}  |  Zoom: {zoom}
-                </div> */}
+                </div>
                 <div ref={mapContainer} className="map-container h-screen" />
             </div>
         </div>
