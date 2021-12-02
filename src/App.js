@@ -31,7 +31,7 @@ export default function App(){
 
     useEffect(() => {
         // get cities from the backend
-        fetch('http://localhost:5000/depthFirstSearch')
+        fetch('https://algorithms-api.herokuapp.com/depthFirstSearch')
         .then(response => response.json())
         .then(({data: cities}) => {
             console.log(cities)
