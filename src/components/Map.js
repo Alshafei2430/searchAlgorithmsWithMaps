@@ -1,6 +1,6 @@
 import mapboxgl from "mapbox-gl";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 
 
 const mapState = ({cities}) => ({
@@ -33,8 +33,8 @@ function Map({path}) {
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [lng, lat],
-            zoom: zoom
+            center: [31.23, 30.07],
+            zoom: 6.5
         })
         map.current.on('load', () => {
             console.log("1", pathCities)
