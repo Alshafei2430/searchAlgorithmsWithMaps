@@ -1,9 +1,9 @@
 import CloseIcon from "./CloseIcon";
 import Menu from "./Menu";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-import {  getCities, getPathCities } from "../redux/cities/cities-actions";
+import {   getPathCities } from "../redux/cities/cities-actions";
 
 const mapState = ({cities}) => ({
     cities: cities.cities
@@ -15,11 +15,6 @@ const DropdownMenue = ({handleShowSidebar}) => {
     const [startCity, setStartCity] = useState('')
     const [endCity, setEndCity] = useState('')
     const [algo, setAlgo] = useState('')
-    // const [algorithms, setAlgorithms] = useState(["Depth First Search",'Breadth First Search', 'A*'])
-
-    useEffect(() => {
-        dispatch(getCities())
-    }, [dispatch])
     
     const selectStartCity = (city) => {
         setStartCity(city)

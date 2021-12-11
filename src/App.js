@@ -5,18 +5,23 @@ import DropdownMenue from './components/DropdownMenue'
 import Overlay from './components/Overlay'
 import HumborgerMenue from './components/HumborgerMenue';
 import Map from './components/Map';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import {getCities} from './redux/cities/cities-actions'
 
 mapboxgl.accessToken = "pk.eyJ1IjoiYWxzaGFmZWkyNDMwIiwiYSI6ImNrczBkNnV5NTExZ3cycG85aXFvODlhcjYifQ.nHRJE_NeCudV5qyb8baZkg"
 
 const mapState = ({cities}) => ({
-    pathCities: cities.pathCities
+    pathCities: cities.pathCities,
 })
 
 export default function App(){
+    const dispatch = useDispatch()
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const {pathCities} = useSelector(mapState)
-    console.log("here")
+
+    useEffect(() => {
+        dispatch(getCities())
+    }, [dispatch])
     // useEffect(() => {
     //     // get cities from the backend
     //     fetch('http://localhost:5000/depthFirstSearch')
