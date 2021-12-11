@@ -1,6 +1,5 @@
 import CloseIcon from "./CloseIcon";
 import Menu from "./Menu";
-import {  useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import {   getPathCities } from "../redux/cities/cities-actions";
@@ -9,23 +8,12 @@ const mapState = ({cities}) => ({
     cities: cities.cities
 })
 
-const DropdownMenue = ({handleShowSidebar}) => {
+const DropdownMenue = ({handleShowSidebar, startCity, endCity, algo, selectStartCity, selectEndCity, selectAlgo}) => {
     const {cities} = useSelector(mapState)
     const dispatch = useDispatch()
-    const [startCity, setStartCity] = useState('')
-    const [endCity, setEndCity] = useState('')
-    const [algo, setAlgo] = useState('')
-    
-    const selectStartCity = (city) => {
-        setStartCity(city)
-    }
-    const selectEndCity = (city) => {
-        setEndCity(city)
-    }
 
     const handleSubmit =  (e) => {
         e.preventDefault()
-        console.log("go")
         dispatch(getPathCities({
             startCity,
             endCity,
@@ -46,7 +34,7 @@ const DropdownMenue = ({handleShowSidebar}) => {
                             type='radio'
                             name='picked'
                             value='depthFirstSearch'
-                            onChange = {(e) => setAlgo(e.target.value)}
+                            onChange = {(e) => selectAlgo(e.target.value)}
                             checked={algo === 'depthFirstSearch'}
                         />
                         Depth First Search
@@ -56,7 +44,7 @@ const DropdownMenue = ({handleShowSidebar}) => {
                             type='radio'
                             name='picked'
                             value='breadthFirstSearch'
-                            onChange = {(e) => setAlgo(e.target.value)}
+                            onChange = {(e) => selectAlgo(e.target.value)}
                             checked={algo === 'breadthFirstSearch'}
                         />
                         BreadthFirstSearch
@@ -66,7 +54,7 @@ const DropdownMenue = ({handleShowSidebar}) => {
                             type='radio'
                             name='picked'
                             value='aStar'
-                            onChange = {(e) => setAlgo(e.target.value)}
+                            onChange = {(e) => selectAlgo(e.target.value)}
                             checked={algo === 'aStar'}
                         />
                         A*
@@ -76,23 +64,19 @@ const DropdownMenue = ({handleShowSidebar}) => {
                 <label className="mb-4">
                     Starting city
                     {cities.length ?
-                        <Menu cities={cities} selectCity={selectStartCity}/>
+                        <Menu cities={cities} city={startCity} selectCity={selectStartCity}/>
                         : <div>loading</div>
                     }
                 </label>
                 <label className="mb-4">
                     Destination City
                     {cities.length ?
-                        <Menu cities={cities} selectCity={selectEndCity}/>
+                        <Menu cities={cities} city={endCity} selectCity={selectEndCity}/>
                         : <div>loading</div>
                     }
                 </label>
                 <button type="submit" onClick={handleSubmit}>Go</button>
             </form>
-            {/* dropdown menue to choose the country */}
-            {/* two dropdown menu to choose the start city and end city  according
-                to the country chosen
-            */}
         </div>
     )
 }

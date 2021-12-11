@@ -18,6 +18,9 @@ export default function App(){
     const dispatch = useDispatch()
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const {pathCities} = useSelector(mapState)
+    const [startCity, setStartCity] = useState('')
+    const [endCity, setEndCity] = useState('')
+    const [algo, setAlgo] = useState('')
 
     useEffect(() => {
         dispatch(getCities())
@@ -106,13 +109,29 @@ export default function App(){
         e.preventDefault();
         setIsSidebarOpen(!isSidebarOpen)
     }
+    const selectStartCity = (city) => {
+        setStartCity(city)
+    }
+    const selectEndCity = (city) => {
+        setEndCity(city)
+    }
+    const selectAlgo = (city) => {
+        setAlgo(city)
+    }
 
     return (
         <div>
-                {/* <div>hi</div> */}
                 {isSidebarOpen ? (
                     <>
-                        <DropdownMenue handleShowSidebar={handleShowSidebar}/>
+                        <DropdownMenue
+                        startCity={startCity}
+                        endCity={endCity}
+                        algo={algo}
+                        handleShowSidebar={handleShowSidebar}
+                        selectStartCity={selectStartCity}
+                        selectEndCity={selectEndCity}
+                        selectAlgo={selectAlgo}
+                        />
                         <Overlay handleShowSidebar={handleShowSidebar} />
                     </>
                 ): <HumborgerMenue handleShowSidebar={handleShowSidebar} />
