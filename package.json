@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.4.0",
+    "@tailwindcss/forms": "^0.4.0",
     "firebase": "^9.4.1",
     "firebase-tools": "^9.22.0",
     "formik": "^2.2.9",

@@ -7,9 +7,9 @@ const Menu = (props) => {
     }
 
     return(
-        <select value={city} onChange={handleChange} className="ml-2">
+        <select value={city} onChange={handleChange} className="focus:ring-blue-100  focus:border-blue-100 p-2 border-gray-300 rounded-lg text-sm shadow-sm">
             {cities?.map((city) => 
-                <option>{city}</option>
+                <option className="">{city}</option>
             )}
         </select>
     )
