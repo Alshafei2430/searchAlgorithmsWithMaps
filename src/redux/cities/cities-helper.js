@@ -1,5 +1,5 @@
 export const handleGetCities = async () => {
-    const response = await fetch('https://algorithms-api.herokuapp.com/cities')
+    const response = await fetch('http://localhost:5000/cities')
     .then(response => response.json())
     .then(({data: citiesList}) => citiesList)
     return response
@@ -7,7 +7,7 @@ export const handleGetCities = async () => {
 
 export const handleGetPathCities = async (payload) => {
     const {algo, endCity, startCity} = payload
-    const response = await fetch(`https://algorithms-api.herokuapp.com/${algo}`, {
+    const response = await fetch(`http://localhost:5000/${algo}`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
