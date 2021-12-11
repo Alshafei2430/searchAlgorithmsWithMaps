@@ -8,27 +8,17 @@ const mapState = ({cities}) => ({
 })
 
 function Map({path}) {
-    // const dispatch = useDispatch()
     const {pathCities} = useSelector(mapState)
     const mapContainer = useRef(null);
     const map = useRef(null);
-    // const [pathCities, setPathCities] = useState(path)
 
 
     const [lng, setLng] = useState(31.23);
     const [lat, setLate] = useState(30.07);
     const [zoom, setZoom] = useState(6.5);
-    // const [geojson, setGeojson] = useState({})
     
 
-    // const drawPath = () => {
-    //         console.log(pathCities)
-
-    // }
-
     useEffect(() => {
-        console.log(">>>>>>>>>>>>>>>>>>>>>>.")
-
         // render the map
         map.current = new mapboxgl.Map({
             container: mapContainer.current,
@@ -37,9 +27,7 @@ function Map({path}) {
             zoom: 6.5
         })
         map.current.on('load', () => {
-            console.log("1", pathCities)
             if (!map.current.getSource('route')) {
-                console.log("2")
                 map.current.addSource('route', {
                     'type': 'geojson',
                     'data': {

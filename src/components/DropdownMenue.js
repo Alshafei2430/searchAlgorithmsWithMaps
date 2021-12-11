@@ -14,6 +14,7 @@ const DropdownMenue = ({handleShowSidebar, startCity, endCity, algo, selectStart
 
     const handleSubmit =  (e) => {
         e.preventDefault()
+        if (!startCity || !endCity || !algo) return;
         dispatch(getPathCities({
             startCity,
             endCity,
