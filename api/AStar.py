@@ -1,6 +1,6 @@
 from collections import deque
 
-from getCitiesLatLng import getPathCitiesLatLng
+from getCityNeighboursLatLng import getPathCitiesLatLng
 
 #---------------------------------------------------------------------
 #------------------------ A* Search Function -------------------------
