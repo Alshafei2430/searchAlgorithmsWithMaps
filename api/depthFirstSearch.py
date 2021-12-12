@@ -1,6 +1,5 @@
-import json
 from treeSorted import tree
-from getCitiesLatLng import getPathCitiesLatLng
+from getCityNeighboursLatLng import getPathCitiesLatLng
 
 def make_visited_false(tree):
     """
@@ -18,6 +17,7 @@ def DFS(initial_state, goal_state, parent={}, visited={}):
     Applys depth first search algorithm to the given graph
     initial_state: is the start city
     goal_state: the city the user want to reach
+    returns a dict. of cities each city as a key with its parent city as a value
     """
     visited[initial_state]=True
 
@@ -40,9 +40,10 @@ def get_DFSpath(initial_state = 'Al Husayniyah', goal_state = 'Halwan'):
     Takes two cities and returns the route between the chosen cities
     initial_state: is the start city
     goal_state: the city the user want to reach
-
+    returns the path from the start city to the goal city
     """
-    path=[]
+
+    path=[]  # path from the start city to the goal city
 
     visited=make_visited_false(tree)
     parent=dict()
@@ -52,6 +53,8 @@ def get_DFSpath(initial_state = 'Al Husayniyah', goal_state = 'Halwan'):
         goal_state=parent[goal_state]
     path.reverse()
     path = [initial_state] + path
+
+    # returns the path with latitude and longitude of each city
     return getPathCitiesLatLng(path)
 
 
