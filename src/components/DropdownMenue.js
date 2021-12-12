@@ -20,6 +20,7 @@ const DropdownMenue = ({handleShowSidebar, startCity, endCity, algo, selectStart
             endCity,
             algo,
         }))
+        handleShowSidebar(e)
     }
     
 
